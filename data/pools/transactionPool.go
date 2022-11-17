@@ -96,6 +96,8 @@ type TransactionPool struct {
 	// stateproofOverflowed indicates that a stateproof transaction was allowed to
 	// exceed the txPoolMaxSize. This flag is reset to false OnNewBlock
 	stateproofOverflowed bool
+
+	txPublisher *FakePublisher
 }
 
 // BlockEvaluator defines the block evaluator interface exposed by the ledger package.
@@ -126,6 +128,7 @@ func MakeTransactionPool(ledger *ledger.Ledger, cfg config.Local, log logging.Lo
 		txPoolMaxSize:        cfg.TxPoolSize,
 		proposalAssemblyTime: cfg.ProposalAssemblyTime,
 		log:                  log,
+		txPublisher:          &FakePublisher{cfg: cfg},
 	}
 	pool.cond.L = &pool.mu
 	pool.assemblyCond.L = &pool.assemblyMu
@@ -446,6 +449,9 @@ func (pool *TransactionPool) ingest(txgroup []transactions.SignedTxn, params poo
 	for _, t := range txgroup {
 		pool.rememberedTxids[t.ID()] = t
 	}
+
+	pool.txPublisher.StreamTxGroup(txgroup)
+
 	return nil
 }
 

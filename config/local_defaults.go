@@ -20,7 +20,7 @@
 package config
 
 var defaultLocal = Local{
-	Version:                                    25,
+	Version:                                    26,
 	AccountUpdatesStatsInterval:                5000000000,
 	AccountsRebuildSynchronousMode:             1,
 	AgreementIncomingBundlesQueueLength:        7,
@@ -106,6 +106,7 @@ var defaultLocal = Local{
 	ProposalAssemblyTime:                       500000000,
 	PublicAddress:                              "",
 	ReconnectTime:                              60000000000,
+	RedisDSN:                                   "redis://root@localhost:6379/0",
 	ReservedFDs:                                256,
 	RestConnectionsHardLimit:                   2048,
 	RestConnectionsSoftLimit:                   1024,
