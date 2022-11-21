@@ -70,6 +70,10 @@ ifeq ($(SHORT_PART_PERIOD), 1)
 export SHORT_PART_PERIOD_FLAG := -s
 endif
 
+# Introduced by Diatomix to use its private repos
+DIATOMIX_REPO := github.com/Diatomix
+PRIVATE_TOKEN := $(PRIVATE_TOKEN)
+
 GOTAGS      := --tags "$(GOTAGSLIST)"
 GOTRIMPATH	:= $(shell GOPATH=$(GOPATH) && go help build | grep -q .-trimpath && echo -trimpath)
 
@@ -203,16 +207,21 @@ rebuild_swagger: deps
 
 # develop
 
+diatomix:
+	git config --global url.git@github.com\:.insteadOf https\://github.com/
+	git config --global http.extraheader "PRIVATE-TOKEN: $(PRIVATE_TOKEN)"
+	GOPRIVATE=$(DIATOMIX_REPO) go get github.com/Diatomix/algod-tx-queue
+
 build: buildsrc
 
 # We're making an empty file in the go-cache dir to
 # get around a bug in go build where it will fail
 # to cache binaries from time to time on empty NFS
 # dirs
-buildsrc: check-go-version crypto/libs/$(OS_TYPE)/$(ARCH)/lib/libsodium.a node_exporter NONGO_BIN
+buildsrc: check-go-version crypto/libs/$(OS_TYPE)/$(ARCH)/lib/libsodium.a node_exporter NONGO_BIN diatomix
 	mkdir -p "${GOCACHE}" && \
 	touch "${GOCACHE}"/file.txt && \
-	go install $(GOTRIMPATH) $(GOTAGS) $(GOBUILDMODE) -ldflags="$(GOLDFLAGS)" ./...
+	GOPRIVATE=$(DIATOMIX_REPO) go install $(GOTRIMPATH) $(GOTAGS) $(GOBUILDMODE) -ldflags="$(GOLDFLAGS)" ./...
 
 check-go-version:
 	./scripts/check_golang_version.sh build
