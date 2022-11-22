@@ -4,10 +4,10 @@ go 1.18
 
 require (
 	github.com/DataDog/zstd v1.5.2
-	github.com/Diatomix/algod-tx-queue v0.0.0-20221117141837-294bfc1e521e
+	github.com/Diatomix/algod-tx-queue v0.0.0-20221122134749-fb3b0c188705
 	github.com/algorand/avm-abi v0.1.0
 	github.com/algorand/falcon v0.0.0-20220727072124-02a2a64c4414
-	github.com/algorand/go-codec/codec v1.1.8
+	github.com/algorand/go-codec/codec v1.1.9
 	github.com/algorand/go-deadlock v0.2.2
 	github.com/algorand/go-sumhash v0.1.0
 	github.com/algorand/graphtrace v0.1.0
