@@ -2,6 +2,7 @@ package pools
 
 import (
 	"fmt"
+
 	algodtxqueue "github.com/Diatomix/algod-tx-queue"
 	"github.com/algorand/go-algorand/config"
 	"github.com/algorand/go-algorand/data/transactions"
